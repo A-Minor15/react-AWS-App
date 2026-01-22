@@ -6,7 +6,7 @@
 利用者は取得したURLを使用して、直接ストレージへデータを送信します。
 
 ## 2. エンドポイント
-* ベースURL: https://xxxxxxxx.execute-api.ap-northeast-3.amazonaws.com/prod
+* ベースURL: `https://xxxxxxxx.execute-api.ap-northeast-3.amazonaws.com/prod`
 * プロトコル: HTTPS(TLS 1.2以上)
 
 ## 3. 認証(Authentication)
@@ -14,13 +14,13 @@
 
 |ヘッダー名|値|内容|
 |:---|:---|:---|
-|Authorization|Bearer <ID_TOKEN>|Cogniteで取得した有効なトークン|
+|Authorization|`Bearer <ID_TOKEN>`|Cogniteで取得した有効なトークン|
 
 ## 4. API定義
 ### 4.1 アップロードURL発行
 アップロード用と閲覧用の署名付きURLを取得します。
 * メソッド: POST
-* パス: /get-s3-upload-url
+* パス: `/get-s3-upload-url`
 
 **リクエストボディ(JSON)**
 |項目名|型|必須|説明|
@@ -38,9 +38,9 @@
 **エラーレスポンス(Error)**
 |ステータス|原因|
 |:---|:---|
-|401 Unauthorized|トークンが未設定または有効期限切れ|
-|403 Forbidden|権限不足|
-|500 Internal Server Error|サーバー側処理失敗|
+|`401 Unauthorized`|トークンが未設定または有効期限切れ|
+|`403 Forbidden`|権限不足|
+|`500 Internal Server Error`|サーバー側処理失敗|
 
 ## 5. シーケンス図
 1. **[Client]** -> Cognite でログインし、トークンを取得。
@@ -70,3 +70,22 @@ sequenceDiagram
   S3-->>Lambda: uploadUrl / viewUrl を返却
   Lambda->>User: 200 OK（アップロード完了）
 ```
+
+## 6. Setup
+1. リポジトリをクローンします。
+2. プロジェクトルートに`.env`ファイルを作成し、以下の項目を設定してください。
+
+### .env の設定項目
+`.env.example` を参考に、自身のAWS環境に合わせて値を入力してください。
+
+|変数名|内容|
+|:---|:---|
+|`VITE_AWS_REGION`|AWSリージョン(例: ap-northeast-1)|
+|`VITE_COGNITO_USER_POOL_ID`|Cognito ユーザープールID|
+|`VITE_COGNITO_CLIENT_ID`|Cognito アプリクライアントID|
+|`VITE_API_ENDPOINT`|API Gateway のエンドポイントURL|
+
+3. パッケージをインストールし、アプリを起動します。
+```bash
+npm install
+npm run dev
