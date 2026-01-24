@@ -80,7 +80,6 @@ sequenceDiagram
 
 |変数名|内容|
 |:---|:---|
-|`VITE_AWS_REGION`|AWSリージョン(例: ap-northeast-1)|
 |`VITE_COGNITO_USER_POOL_ID`|Cognito ユーザープールID|
 |`VITE_COGNITO_CLIENT_ID`|Cognito アプリクライアントID|
 |`VITE_API_ENDPOINT`|API Gateway のエンドポイントURL|
