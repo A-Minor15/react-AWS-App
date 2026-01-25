@@ -1,0 +1,47 @@
+# ワークフロー名
+name: Deploy React to S3 and CloudFront
+
+# 実行タイミングの定義
+on:
+  push:
+    branches:
+      - main # mainブランチにコードがpushされた時に自動実行
+
+jobs:
+  deploy:
+    # 実行環境（Githubが用意してくれる仮想マシン）
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHubのリポジトリからコードを仮想マシンに持ってくる
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Node.jsのライブラリをインストール
+      - name: Install dependencies
+        run: npm install
+
+      # Reactをビルド
+      - name: Build project
+        run: npm run build
+
+      # 4. AWSにアクセスするための鍵を設定
+      # GitHub Secretsに登録した値を安全に呼び出す
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-3
+
+      # 5. 生成されたビルド生成物の中身をS3バケットへ同期
+      # --delete をつけることでS3にしかない古いファイルを削除して同期を保つ
+      - name: Deploy to S3
+        run: |
+          aws s3 sync dist/ s3://my-react-frontend-2026 --delete
+
+      # 6. CloudFrontのキャッシュをクリアする
+      # これをやらないと、S3を更新しても古い画面がしばらく表示される
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
