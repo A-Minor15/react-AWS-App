@@ -24,6 +24,11 @@ jobs:
       # Reactをビルド
       - name: Build project
         run: npm run build
+        env:
+          # Reactで使用している環境変数を設定
+          VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT }}
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets.VITE_COGNITO_USER_POOL_ID }}
+          VITE_COGNITO_CLIENT_ID: ${{ secrets.VITE_COGNITO_CLIENT_ID }}
 
       # 4. AWSにアクセスするための鍵を設定
       # GitHub Secretsに登録した値を安全に呼び出す
