@@ -2,6 +2,7 @@ import { S3Uploader } from "./components/S3Uploader";
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+import { DisplayUploadedFiles } from "./components/DisplayUploadedFiles";
 
 // Amplifyの設定
 Amplify.configure({
@@ -46,6 +47,7 @@ function App() {
 
           {/* ログイン成功時のみ表示されるメインコンテンツ */}
           <S3Uploader />
+          <DisplayUploadedFiles />
         </main>
       )}
     </Authenticator>
