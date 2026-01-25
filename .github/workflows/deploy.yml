@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main # mainブランチにコードがpushされた時に自動実行
+  workflow_dispatch: # 手動実行
 
 jobs:
   deploy:
