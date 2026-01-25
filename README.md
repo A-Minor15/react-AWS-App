@@ -6,7 +6,7 @@
 利用者は取得したURLを使用して、直接ストレージへデータを送信します。
 
 ## 2. エンドポイント
-* ベースURL: `https://xxxxxxxx.execute-api.ap-northeast-3.amazonaws.com/prod`
+* ベースURL: `https://xxxxxxxx.execute-api.ap-northeast-3.amazonaws.com`
 * プロトコル: HTTPS(TLS 1.2以上)
 
 ## 3. 認証(Authentication)
