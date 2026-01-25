@@ -60,14 +60,28 @@ sequenceDiagram
 
   Note over User, Auth: 1. ログインフェーズ
   User->>Auth: ID/パスワードを送信
-  Auth->>User: IDトークンを発行
+  Auth->>User: IDトークンを発行(トークンを保持)
 
-  Note over User, S3: 2. アップロード準備フェーズ
+  Note over User, S3: 2. 初期表示フェース
+  User->>API: GET /get-filelist（Auth検証済）
+  API->>Lambda: リクエストを転送
+  Lambda->>S3: ListObjectsV2を実行
+  S3->>Lambda: filelist(ファイル名, サイズ, 更新日時)を返却
+  Lambda->>User: ファイル名、サイズ、最終更新日などをJSONで返却
+  User->>User: ファイルリスト表示
+
+  Note over User, S3: 3. ファイルURL取得フェーズ
+  User->>API: ファイルURL取得要求
+  API->>Lambda: リクエストを転送
+  Lambda->>User: 署名付きURLを返却
+  User->>User: 取得したURLのファイルを表示
+
+  Note over User, S3: 3. アップロード準備フェーズ
   User->>API: POST /get-url（IDトークンをヘッダーに添付）
   API->>Auth: トークンの有効性を検証
   API->>Lambda: 有効ならリクエストを転送
   Lambda->>S3: 署名付きURLをリクエスト
-  S3-->>Lambda: uploadUrl / viewUrl を返却
+  S3->>Lambda: uploadUrl / viewUrl を返却
   Lambda->>User: 200 OK（アップロード完了）
 ```
 
