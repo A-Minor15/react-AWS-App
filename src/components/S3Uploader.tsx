@@ -36,12 +36,15 @@ export const S3Uploader = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={(e) => setFile(e.target.files?.[0] || null)}
-        disabled={isUploading} // 通信中はファイル選択不可
-      />
+      <label>
+        ファイル選択
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          disabled={isUploading} // 通信中はファイル選択不可
+        />
+      </label>
       <button
         onClick={handleUpload}
         disabled={isUploading || !file}
