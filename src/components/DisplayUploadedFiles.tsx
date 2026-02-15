@@ -1,6 +1,10 @@
+import { Box } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
-import { GetFilelist } from "../services/s3Service";
 import type { FileItem } from "../services/s3Service";
+import { GetFilelist } from "../services/s3Service";
+import { columns } from "./fileColumns.ts";
+
 
 export const DisplayUploadedFiles = () => {
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -15,31 +19,27 @@ export const DisplayUploadedFiles = () => {
     }
   };
 
+
+
   return (
     <div>
-      <h3>アップロード済みファイル一覧</h3>
-      <button onClick={handleGetFilelist}>更新</button>
+      <div className="fileListArea">
+        <h3>アップロード済みファイル一覧</h3>
+        <button onClick={handleGetFilelist}>
+          更新
+        </button>
+      </div>
+
       {files.length === 0 ? (
         <p>ファイルがありません。</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>ファイル名</th>
-              <th>サイズ(byte)</th>
-              <th>最終更新日</th>
-            </tr>
-          </thead>
-          <tbody>
-            {files.map((file) => (
-              <tr key={file.fileName}>
-                <td>{file.fileName}</td>
-                <td>{file.fileSize?.toLocaleString()}</td>
-                <td>{file.lastModified ? new Date(file.lastModified).toLocaleString() : "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Box>
+          <DataGrid
+            rows={files}
+            columns={columns}
+            getRowId={(row) => row.fileName}
+          />
+        </Box>
       )}
 
     </div>

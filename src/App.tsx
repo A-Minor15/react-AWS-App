@@ -1,8 +1,8 @@
-import { S3Uploader } from "./components/S3Uploader";
-import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+import { Amplify } from 'aws-amplify';
 import { DisplayUploadedFiles } from "./components/DisplayUploadedFiles";
+import { S3Uploader } from "./components/S3Uploader";
 
 // Amplifyの設定
 Amplify.configure({
@@ -23,7 +23,9 @@ function App() {
   return (
     <Authenticator>
       {({ signOut, user }) => (
-        <main style={{ padding: '20px' }}>
+        <main style={{
+          flexGrow: '1',
+          }}>
           <header
             style={{
               display: 'flex',
@@ -43,11 +45,12 @@ function App() {
             </div>
           </header>
 
-          <hr />
-
           {/* ログイン成功時のみ表示されるメインコンテンツ */}
-          <S3Uploader />
-          <DisplayUploadedFiles />
+          <div className="content">
+            <S3Uploader />
+            <DisplayUploadedFiles />
+          </div>
+
         </main>
       )}
     </Authenticator>
