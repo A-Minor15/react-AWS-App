@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { S3Uploader } from "./S3Uploader";
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as S3Service from '../services/s3Service';
+import { S3Uploader } from "./S3Uploader";
 
 describe('S3Uploader', () => {
   // 各テストの前に実行
@@ -27,7 +27,7 @@ describe('S3Uploader', () => {
     const user = userEvent.setup();
     render(<S3Uploader />);
 
-    // ファイルの入力要素を取得（hidden: trueで非表示のinput要素も対象にする
+    // ファイルの入力要素を取得(hidden: trueで非表示のinput要素も対象にする)
     const fileInput = screen.getByLabelText('ファイル選択') as HTMLElement;
 
     // テスト用のダミーファイルを作成
@@ -71,7 +71,6 @@ describe('S3Uploader', () => {
     const image = screen.getByAltText('Uploaded') as HTMLImageElement;
     expect(image.src).toBe(mockViewUrl);
   });
-
 
   // テスト4: エラーハンドリング
   it('アップロードがエラーになるとアラートが表示される', async () => {

@@ -4,17 +4,18 @@ export const columns: GridColDef[] = [
   {
     field: "fileName",
     headerName: "ファイル名",
-    flex: 1
+    flex: 2,
+    editable: true
   },
   {
     field: "fileSize",
-    headerName: "サイズ[B]",
+    headerName: "サイズ(byte)",
     flex: 1,
     valueFormatter: (value: number) => value?.toLocaleString(),
   },
   {
     field: "lastModified",
-    headerName: "更新日",
+    headerName: "最終更新日",
     flex: 1,
     valueFormatter: (value: string) => {
       if (!value) return '-';

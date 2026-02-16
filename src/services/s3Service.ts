@@ -85,3 +85,9 @@ export const GetFilelist = async () => {
 
   return resData.files || [];
 };
+
+export const UpdateFileName = async (oldName: string, newName: string): Promise<void> => {
+  console.log(`API呼出: ${oldName} を ${newName} に変更`);
+
+  return new Promise((resolve) => setTimeout(resolve, 500));
+};
