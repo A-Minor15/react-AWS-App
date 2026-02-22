@@ -5,7 +5,6 @@ export const columns: GridColDef[] = [
     field: "fileName",
     headerName: "ファイル名",
     flex: 2,
-    editable: true
   },
   {
     field: "fileSize",

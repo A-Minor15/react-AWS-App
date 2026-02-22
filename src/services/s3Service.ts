@@ -85,27 +85,3 @@ export const GetFilelist = async () => {
 
   return resData.files || [];
 };
-
-export const UpdateFileName = async (oldName: string, newName: string): Promise<void> => {
-  const endpoint = import.meta.env.VITE_API_ENDPOINT + "/default/update-filename";
-
-  // 現在のログインセッションから「IDトークン」を取得
-  const session = await fetchAuthSession();
-  const idToken = session.tokens?.idToken?.toString();
-
-  // バックエンドからファイルリストを取得
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${idToken}`,
-    },
-    body: JSON.stringify({ oldName, newName }),
-  });
-
-  if (!response.ok) {
-    // 500エラーなどの場合、Lambdaが返したエラーメッセージを取得
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || "サーバー側でエラーが発生しました");
-  }
-};

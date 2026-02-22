@@ -19,26 +19,6 @@ export const DisplayUploadedFiles = () => {
     }
   };
 
-  const handleProcessRowUpdate = async (newRow: FileItem, oldRow: FileItem) => {
-    // 名前が変わっていない場合は何もしない
-    if (newRow.fileName === oldRow.fileName) return oldRow;
-
-    try {
-      // APIを呼び出し、完了を待つ
-      await UpdateFileName(oldRow.fileName, newRow.fileName);
-
-      // 成功したらローカルの状態(files)を更新する
-      const updatedFiles = files.map((file) =>
-        file.fileName === oldRow.fileName ? newRow : file
-      );
-      setFiles(updatedFiles);
-    } catch (err) {
-      alert(`ファイル名の更新に失敗しました。`);
-      // 失敗したら元の値に戻す
-      return oldRow;
-    }
-  };
-
   return (
     <div>
       <div className="fileListArea">
@@ -56,7 +36,6 @@ export const DisplayUploadedFiles = () => {
             rows={files}
             columns={columns}
             getRowId={(row) => row.fileName}
-            processRowUpdate={handleProcessRowUpdate}
           />
         </Box>
       )}
