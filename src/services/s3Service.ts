@@ -85,3 +85,28 @@ export const GetFilelist = async () => {
 
   return resData.files || [];
 };
+
+export const DeleteFile = async (key: string): Promise<void> => {
+  const endpoint = import.meta.env.VITE_DELETE_API_ENDPOINT;
+
+  // 現在のログインセッションからIDトークンを取得
+  const session = await fetchAuthSession();
+  const idToken = session.tokens?.idToken?.toString();
+
+  if (!idToken) {
+    throw new Error("ログインが必要です");
+  }
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`,
+    },
+    body: JSON.stringify({ key }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`削除に失敗しました（ステータス ${res.status}）`);
+  }
+}

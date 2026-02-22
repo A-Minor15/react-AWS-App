@@ -1,6 +1,6 @@
 import type { GridColDef } from "@mui/x-data-grid";
 
-export const columns: GridColDef[] = [
+export const baseColumns: GridColDef[] = [
   {
     field: "fileName",
     headerName: "ファイル名",
