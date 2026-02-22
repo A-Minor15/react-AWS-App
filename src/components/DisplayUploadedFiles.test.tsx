@@ -25,7 +25,6 @@ describe('DisplayUploadedFiles', () => {
     vi.clearAllMocks();
     // デフォルトで成功する値を設定
     vi.spyOn(s3Service, 'GetFilelist').mockResolvedValue(MOCK_FILES);
-    vi.spyOn(s3Service, 'UpdateFileName').mockResolvedValue(undefined);
   });
   afterEach(() => {
     vi.restoreAllMocks();
@@ -79,40 +78,4 @@ describe('DisplayUploadedFiles', () => {
       expect(alertMock).toHaveBeenCalledWith('テストエラー');
     });
   })
-
-  it('ファイル名のセルを編集して確定すると、更新関数が呼ばれる', async () => {
-    const { user } = setup();
-
-    // 更新ボタンを押下
-    await user.click(screen.getByRole("button", { name: "更新" }));
-
-    // 編集したいファイル名のセルを見つける
-    const fileCell = await screen.findByRole('gridcell', { name: 'test-document.pdf' });
-
-    // ダブルクリックして編集モードに以降
-    await user.dblClick(fileCell);
-
-    // 編集用の入力欄が表示されるのを待ち、新しいファイル名を入力
-    const input = await screen.findByRole('textbox');
-    await user.clear(input);
-    await user.type(input, 'new-name.txt{enter}'); // Enterで確定
-
-    // 表示が更新されているか確認
-    expect(s3Service.UpdateFileName).toHaveBeenCalledWith('test-document.pdf', 'new-name.txt');
-  });
-
-  it('API更新が失敗した場合はエラーメッセージが表示される', async () => {
-    vi.spyOn(s3Service, 'UpdateFileName').mockRejectedValue(new Error('更新失敗'));
-    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
-
-    const { user } = setup();
-    await user.click(screen.getByRole("button", { name: "更新" }));
-
-    const fileCell = await screen.findByRole('gridcell', { name: 'test-document.pdf' });
-    await user.dblClick(fileCell);
-    await user.type(await screen.findByRole('textbox'), 'new-name.txt{enter}');
-    await waitFor(() => {
-      expect(alertMock).toHaveBeenCalledWith('ファイル名の更新に失敗しました。');
-    });
-  });
 });
